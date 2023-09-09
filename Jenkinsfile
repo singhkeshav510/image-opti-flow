@@ -3,9 +3,7 @@ pipeline {
      stages {
          stage('build') {
               when {
-                  expression {
-                     return env.BRANCH_NAME == 'main';
-                  }             
+                  branch 'dev'             
               }
               steps {
                  echo "Working on dev branch"
