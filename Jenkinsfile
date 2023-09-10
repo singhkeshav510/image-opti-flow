@@ -10,15 +10,13 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "python3 -m venv venv"
-                sh ". venv/bin/activate"
                 sh "pip3 install -r requirements.txt"
             }
         }
 
         stage("Test") {
             steps {
-                sh "where coverage"
+                sh "coverage run -m pytest"
             }
         }
 
