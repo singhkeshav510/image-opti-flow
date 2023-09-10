@@ -18,8 +18,8 @@ pipeline {
 
         stage("Test") {
             steps {
+                sh "python3 -m pytest test/"
                 sh "coverage run -m pytest"
-                sh "coverage html"
             }
         }
 
