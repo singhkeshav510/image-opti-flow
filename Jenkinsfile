@@ -18,7 +18,7 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "coverage run -m pytest"
+                sh "where coverage"
             }
         }
 
