@@ -14,6 +14,7 @@ pipeline {
                 sh ". venv/bin/activate"
                 sh "pip3 install -r requirements.txt"
                 sh "pip3 install coverage"
+                sh "coverage run -m pytest"
             }
         }
 
