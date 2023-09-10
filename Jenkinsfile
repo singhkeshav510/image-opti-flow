@@ -7,6 +7,7 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/singhkeshav510/image-opti-flow']]])
             }
         }
+
         stage("Build") {
             steps {
                 sh "python3 -m venv venv"
@@ -17,7 +18,8 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "python3 -m pytest test/"
+                sh "coverage run -m pytest"
+                sh "coverage html"
             }
         }
 
