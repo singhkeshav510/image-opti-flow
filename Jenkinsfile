@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3'
-        }
-    }
+    agent any
     stages {
         stage("Checkout") {
             environment {
@@ -28,8 +24,8 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "python3 -m pytest test/"
-                sh "coverage run -m pytest"
+                sh "/Users/keshavsingh/anaconda3/bin/python3 -m pytest test/"
+                sh "/Users/keshavsingh/anaconda3/bin/coverage run -m pytest"
             }
         }
 
