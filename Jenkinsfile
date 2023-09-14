@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'python:3'
-            args '-u root'
+            image 'docker:latest'
+            args '-u root'  // Use root user for Docker inside the container
         }
     }
     stages {
