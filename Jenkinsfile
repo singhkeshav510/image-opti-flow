@@ -24,7 +24,6 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "/Users/keshavsingh/anaconda3/bin/python3 -m pytest test/"
                 sh "/Users/keshavsingh/anaconda3/bin/coverage run -m pytest"
             }
         }
