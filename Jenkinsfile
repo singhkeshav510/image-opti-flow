@@ -1,6 +1,10 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3'
+            label 'my-build-agent'
+        }
+    }
     stages {
         stage("Checkout") {
             steps {
@@ -13,13 +17,12 @@ pipeline {
                 sh "python3 -m venv venv"
                 sh ". venv/bin/activate"
                 sh "pip3 install -r requirements.txt"
-                sh "pip3 install coverage"
-                sh "coverage run -m pytest"
             }
         }
 
         stage("Test") {
             steps {
+                sh "python3 -m pytest test/"
                 sh "coverage run -m pytest"
             }
         }
