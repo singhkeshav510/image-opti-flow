@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage("Package") {
-            steps {t
+            steps {
                 sh "zip -r function.zip ."
                 archiveArtifacts artifacts: 'function.zip', fingerprint: true
             }
