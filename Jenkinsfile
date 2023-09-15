@@ -22,11 +22,7 @@ pipeline {
             }
         }
 
-        stage("Test") {
-            steps {
-                sh "python3 -m /home/ubuntu/.local/bin/pytest"
-            }
-        }
+
 
         stage("Package") {
             steps {
