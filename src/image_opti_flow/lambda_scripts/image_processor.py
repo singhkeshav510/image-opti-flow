@@ -1,7 +1,7 @@
 import logging
 import os
 
-def lambda_handler(event: str, context: int) -> str:
+def image_processor(event: str, context: int) -> str:
     if type(context) != int:
         return None
     
