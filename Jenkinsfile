@@ -29,7 +29,7 @@ pipeline {
             }
         }
 
-        tage("Package") {
+        stage("Package") {
             steps {t
                 sh "zip -r function.zip ."
                 archiveArtifacts artifacts: 'function.zip', fingerprint: true
