@@ -24,8 +24,8 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "/home/ubuntu/.local/bin/coverage run -m pytest"
-                sh "/home/ubuntu/.local/bin/coverage html"
+                sh "sudo /home/ubuntu/.local/bin/coverage run -m pytest"
+                sh "sudo /home/ubuntu/.local/bin/coverage html"
             }
         }
 
