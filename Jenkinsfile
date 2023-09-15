@@ -43,7 +43,7 @@ pipeline {
 
         stage('Deploy Lambda Function') {
             steps {
-                withAWS(credentials: 'lambda-cred', region: AWS_DEFAULT_REGION) {
+                withAWS(credentials: 'lambda_cred', region: AWS_DEFAULT_REGION) {
                     lambdaDeploy(
                         functionName: FUNCTION_NAME,
                         functionAlias: 'latest', // Optionally specify an alias
