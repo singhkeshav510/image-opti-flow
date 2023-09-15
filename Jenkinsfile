@@ -1,10 +1,15 @@
 pipeline {
     agent any
+
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1' // Specify your desired AWS region
+        FUNCTION_NAME = 'my-lambda-function' // Replace with your Lambda function name
+        LAMBDA_HANDLER = 'my_lambda.handler' // Replace with your Lambda handler function
+        ZIP_FILE = "${FUNCTION_NAME}.zip"
+    }
+
     stages {
         stage("Checkout") {
-            environment {
-                HOME = "${env.WORKSPACE}"
-            }
 
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/singhkeshav510/image-opti-flow']]])
@@ -31,14 +36,28 @@ pipeline {
 
         stage("Package") {
             steps {
-                sh "zip -r function.zip ."
-                archiveArtifacts artifacts: 'function.zip', fingerprint: true
+                sh 'zip -r ${ZIP_FILE} .'
+                archiveArtifacts artifacts: ZIP_FILE, fingerprint: true
             }
         }
 
-         stage("Deploy") {
+        stage('Deploy Lambda Function') {
             steps {
-                step([$class: 'LambdaCreateFunctionBuilder', credentialsId: 'lambda-cred', region: 'us-east-1', functionName: 'myDummyLambda', runtime: 'python3.10', artifact: 'function.zip', handler: 'index.handler', role: 'arn:aws:iam::602601681465:role/service-role/myDummyLambda-role-01v3nbzn'])
+                withAWS(credentials: 'lambda-cred', region: AWS_DEFAULT_REGION) {
+                    lambdaDeploy(
+                        functionName: FUNCTION_NAME,
+                        functionAlias: 'latest', // Optionally specify an alias
+                        s3Bucket: 'your-s3-bucket', // Replace with your S3 bucket name
+                        s3Object: ZIP_FILE,
+                        handler: LAMBDA_HANDLER,
+                        runtime: 'python3.8', // Replace with your Lambda runtime
+                        role: 'arn:aws:iam::602601681465:role/testing', // Replace with your Lambda execution role ARN
+                        description: 'My Lambda Function',
+                        memorySize: 256, // Specify the memory size in MB
+                        timeout: 10, // Specify the function timeout in seconds
+                        publish: true // Set to true to publish a new version
+                    )
+                }
             }
         }
 
