@@ -29,5 +29,12 @@ pipeline {
             }
         }
 
+        tage("Package") {
+            steps {t
+                sh "zip -r function.zip ."
+                archiveArtifacts artifacts: 'function.zip', fingerprint: true
+            }
+        }
+
     }
 }
