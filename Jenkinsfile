@@ -29,8 +29,8 @@ pipeline {
 
         stage("Test") {
             steps {
-                sh "/Users/keshavsingh/anaconda3/bin/coverage run -m pytest"
-                sh "/Users/keshavsingh/anaconda3/bin/coverage html"
+                sh "coverage run -m pytest"
+                sh "coverage html"
             }
         }
 
@@ -40,26 +40,5 @@ pipeline {
                 archiveArtifacts artifacts: ZIP_FILE, fingerprint: true
             }
         }
-
-        stage('Deploy Lambda Function') {
-            steps {
-                withAWS(credentials: 'lambda_cred', region: AWS_DEFAULT_REGION) {
-                    lambdaDeploy(
-                        functionName: FUNCTION_NAME,
-                        functionAlias: 'latest', // Optionally specify an alias
-                        s3Bucket: 'your-s3-bucket', // Replace with your S3 bucket name
-                        s3Object: ZIP_FILE,
-                        handler: LAMBDA_HANDLER,
-                        runtime: 'python3.8', // Replace with your Lambda runtime
-                        role: 'arn:aws:iam::602601681465:role/testing', // Replace with your Lambda execution role ARN
-                        description: 'My Lambda Function',
-                        memorySize: 256, // Specify the memory size in MB
-                        timeout: 10, // Specify the function timeout in seconds
-                        publish: true // Set to true to publish a new version
-                    )
-                }
-            }
-        }
-
     }
 }
