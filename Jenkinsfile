@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'
-        AWS_ACCESS_KEY_ID     = credentials('aws-cred')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-cred')
         LAMBDA_FUNCTION_NAME = 'test_lambda'
         S3_BUCKET = 'image-opti-flow-bucket'
         S3_KEY = 'test_code.zip'
