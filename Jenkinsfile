@@ -2,10 +2,12 @@ pipeline {
     agent any
 
     environment {
-        AWS_DEFAULT_REGION = 'us-east-1' // Specify your desired AWS region
-        FUNCTION_NAME = 'my-lambda-function' // Replace with your Lambda function name
-        LAMBDA_HANDLER = 'my_lambda.handler' // Replace with your Lambda handler function
-        ZIP_FILE = "${FUNCTION_NAME}.zip"
+        AWS_REGION = 'us-east-1'
+        AWS_ACCESS_KEY_ID     = credentials('aws-cred')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-cred')
+        LAMBDA_FUNCTION_NAME = 'test_lambda'
+        S3_BUCKET = 'image-opti-flow-bucket'
+        S3_KEY = 'test_code.zip'
     }
 
     stages {
@@ -16,10 +18,7 @@ pipeline {
             }
         }
 
-        stage("Build") {
-            environment {
-                HOME = "${env.WORKSPACE}"
-            }            
+        stage("Build") {          
             steps {
                 sh "python3 -m venv venv"
                 sh ". venv/bin/activate"
@@ -27,17 +26,16 @@ pipeline {
             }
         }
 
-        stage("Test") {
+        stage("Package") {
             steps {
-                sh "coverage run -m pytest"
-                sh "coverage html"
+                sh "zip -r ${S3_KEY} src/image_opti_flow/lambda_scripts/image_processor.py"
             }
         }
 
-        stage("Package") {
+        stage('Deploy') {
             steps {
-                sh 'zip -r ${ZIP_FILE} .'
-                archiveArtifacts artifacts: ZIP_FILE, fingerprint: true
+                sh "aws s3 cp ${S3_KEY} s3://${S3_BUCKET}"
+                sh "aws lambda update-function-code --function-name ${LAMBDA_FUNCTION_NAME} --s3-bucket ${S3_BUCKET} --s3-key ${S3_KEY}"
             }
         }
     }
