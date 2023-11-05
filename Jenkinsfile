@@ -25,7 +25,7 @@ pipeline {
 
         stage("Package") {
             steps {
-                sh "zip -r ${S3_KEY} src/image_opti_flow/lambda_scripts/image_processor.py"
+                sh "zip -r ${S3_KEY} src/image_opti_flow/lambda_scripts/lambda_function.py"
             }
         }
 
