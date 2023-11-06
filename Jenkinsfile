@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        LAMBDA_FUNCTION_NAME = 'test_lambda'
+        LAMBDA_FUNCTION_NAME = 'testLambda'
         S3_BUCKET = 'image-opti-flow-bucket'
         S3_KEY = 'test_code.zip'
     }
